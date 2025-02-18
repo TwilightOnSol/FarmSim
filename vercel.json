@@ -1,14 +1,14 @@
 {
-    "version": 2,
-    "functions": {
-        "api/*.js": {
-            "runtime": "now-php@1.0.0"
-        }
-    },
-    "routes": [
-        {
-            "src": "/api/game",
-            "dest": "/api/game.js"
-        }
-    ]
+  "version": 2,
+  "functions": {
+    "api/*.js": {
+      "runtime": "nodejs20.9.0" // Specify the Node.js version
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/game",
+      "dest": "/api/game.js"
+    }
+  ]
 }
