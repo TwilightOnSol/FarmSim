@@ -1,13 +1,8 @@
-// server.js
+// api/game.js
 const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
 let gameState = {
     coins: 0,
@@ -16,12 +11,12 @@ let gameState = {
 };
 
 // Get game state
-app.get('/game-state', (req, res) => {
+app.get('/', (req, res) => {
     res.json(gameState);
 });
 
 // Update game state
-app.post('/game-state', (req, res) => {
+app.post('/', (req, res) => {
     const { coins, crops } = req.body;
     gameState.coins = coins;
     gameState.crops = crops;
@@ -29,7 +24,4 @@ app.post('/game-state', (req, res) => {
     res.json(gameState);
 });
 
-// Start the server
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
+module.exports = app;
