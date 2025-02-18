@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Self-Sustaining Farm Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="game">
+        <h1>Self-Sustaining Farm Game</h1>
+        <div id="farm">
+            <div id="crops"></div>
+            <button id="plantCrop">Plant Crop</button>
+        </div>
+        <div id="status">
+            <p>Farmers Online: <span id="farmersCount">0</span></p>
+            <p>Coins: <span id="coins">0</span></p>
+            <p>Auto Harvesting: <span id="autoHarvestStatus">Off</span></p>
+            <button id="toggleAutoHarvest">Toggle Auto Harvest</button>
+        </div>
+        <div id="info">
+            <h3>Crop Rarities</h3>
+            <ul>
+                <li>Common: 10 coins</li>
+                <li>Uncommon: 20 coins</li>
+                <li>Rare: 50 coins</li>
+            </ul>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
