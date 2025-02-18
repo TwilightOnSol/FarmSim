@@ -1,0 +1,64 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e0f7fa;
+    text-align: center;
+}
+
+#game {
+    margin: 20px auto;
+    padding: 20px;
+    border: 2px solid #00796b;
+    background-color: #ffffff;
+    width: 400px; /* Increased width for larger farmland */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+#farm {
+    margin: 20px 0;
+}
+
+#crops {
+    height: 200px; /* Increased height for larger farmland */
+    border: 1px solid #00796b;
+    background-color: #b2dfdb;
+    position: relative;
+    overflow: hidden;
+}
+
+.crop {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    border-radius: 5px;
+}
+
+.common {
+    background-color: #4caf50; /* Green */
+}
+
+.uncommon {
+    background-color: #ffeb3b; /* Yellow */
+}
+
+.rare {
+    background -color: #f44336; /* Red */
+}
+
+#status {
+    margin-top: 20px;
+}
+
+button {
+    margin: 5px;
+    padding: 10px 15px;
+    background-color: #00796b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #004d40;
+}
