@@ -6,11 +6,11 @@
     "start": "node api/game.js"
   },
   "dependencies": {
-    "express": "^4.17.1" // Use the latest version of Express
+    "express": "^4.21.2" 
   },
   "devDependencies": {},
   "engines": {
-    "node": ">=14.x" // Specify the Node.js version you want to use
+    "node": "14.0" 
   },
   "license": "MIT"
 }
