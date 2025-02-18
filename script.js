@@ -1,77 +1,80 @@
-let coins = 0;
-let crops = [];
-let farmersCount = 0;
+const plantCropButton = document.getElementById('plantCrop');
+const farmersCountDisplay = document.getElementById('farmersCount');
+const coinsDisplay = document.getElementById('coins');
+const autoHarvestButton = document.getElementById('toggleAutoHarvest');
+const autoHarvestStatusDisplay = document.getElementById('autoHarvestStatus');
+const cropsContainer = document.getElementById('crops');
+
 let autoHarvesting = false;
 
-// DOM Elements
-const coinsDisplay = document.getElementById('coins');
-const cropsDisplay = document.getElementById('crops');
-const farmersCountDisplay = document.getElementById('farmersCount');
-const plantCropButton = document.getElementById('plantCrop');
-const autoHarvestStatusDisplay = document.getElementById('autoHarvestStatus');
-const toggleAutoHarvestButton = document.getElementById('toggleAutoHarvest');
-
-// Load game state from server
-async function loadGameState() {
-    const response = await fetch('http://localhost:3000/game-state');
-    const savedGame = await response.json();
-    coins = savedGame.coins;
-    crops = savedGame.crops;
-    farmersCount = savedGame.farmersCount;
-    updateDisplay();
+// Fetch game state from the server
+async function fetchGameState() {
+    const response = await fetch('/game-state');
+    const gameState = await response.json();
+    updateUI(gameState);
 }
 
-// Update display function
-function updateDisplay() {
-    coinsDisplay.innerText = coins;
-    farmersCountDisplay.innerText = farmersCount;
-    renderCrops();
-}
-
-// Render crops function
-function renderCrops() {
-    cropsDisplay.innerHTML = '';
-    crops.forEach(crop => {
+// Update the UI with the game state
+function updateUI(gameState) {
+    farmersCountDisplay.textContent = gameState.farmersCount;
+    coinsDisplay.textContent = gameState.coins;
+    cropsContainer.innerHTML = ''; // Clear existing crops
+    gameState.crops.forEach(crop => {
         const cropElement = document.createElement('div');
         cropElement.className = `crop ${crop.rarity}`;
         cropElement.style.left = `${crop.x}px`;
         cropElement.style.top = `${crop.y}px`;
-        cropsDisplay.appendChild(cropElement);
+        cropsContainer.appendChild(cropElement);
     });
 }
 
-// Function to plant a crop
-async function plantCrop() {
-    const rarities = ['common', 'uncommon', 'rare'];
-    const randomRarity = rarities[Math.floor(Math.random() * rarities.length)];
-    const newCrop = {
-        rarity: randomRarity,
-        x: Math.random() * (cropsDisplay.clientWidth - 30),
-        y: Math.random() * (cropsDisplay.clientHeight - 30)
+// Plant a crop
+plantCropButton.addEventListener('click', async () => {
+    const crop = {
+        rarity: Math.random() < 0.1 ? 'rare' : Math.random() < 0.5 ? 'uncommon' : 'common',
+        x: Math.random() * 100, // Random x position
+        y: Math.random() * 100  // Random y position
     };
-    crops.push(newCrop);
-    coins += randomRarity === 'common' ? 10 : randomRarity === 'uncommon' ? 20 : 50;
-    await saveGameState();
-    updateDisplay();
-}
-
-// Function to save game state to server
-async function saveGameState() {
-    await fetch('http://localhost:3000/game-state', {
+    const response = await fetch('/game-state', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ coins, crops })
+        body: JSON.stringify({
+            coins: Math.floor(Math.random() * 100), // Random coins for demo
+            crops: [...cropsContainer.children].map(crop => ({
+                rarity: crop.className.split(' ')[1],
+                x: crop.style.left,
+                y: crop.style.top
+            })).concat(crop) // Add new crop
+        })
     });
-}
-
-// Event listeners
-plantCropButton.addEventListener('click', plantCrop);
-toggleAutoHarvestButton.addEventListener('click', () => {
-    autoHarvesting = !autoHarvesting;
-    autoHarvestStatusDisplay.innerText = autoHarvesting ? 'On' : 'Off';
+    await fetchGameState();
 });
 
-// Load initial game state
-loadGameState();
+// Toggle auto harvesting
+autoHarvestButton.addEventListener('click', () => {
+    autoHarvesting = !autoHarvesting;
+    autoHarvestStatusDisplay.textContent = autoHarvesting ? 'On' : 'Off';
+    if (autoHarvesting) {
+        setInterval(async () => {
+            const response = await fetch('/game-state');
+            const gameState = await response.json();
+            const newCoins = gameState.coins + 10; // Add coins every interval
+            await fetch('/game-state', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    coins: newCoins,
+                    crops: gameState.crops
+                })
+            });
+            await fetchGameState();
+        }, 5000); // Harvest every 5 seconds
+    }
+});
+
+// Initial fetch of game state
+fetchGameState();
