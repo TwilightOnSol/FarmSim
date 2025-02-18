@@ -1,5 +1,4 @@
 {
-  "name": "self-sustaining-farm-game",
   "version": "1.0.0",
   "description": "A self-sustaining farm game that multiplies farming speed by users online.",
   "main": "api/game.js",
